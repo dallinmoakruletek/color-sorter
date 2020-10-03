@@ -1,6 +1,23 @@
 const size = 9
 let colors = [];
 
+function sleep(ms){
+  return new Promise(resolve => setTimeout(resolve,ms));
+}
+
+function draw(){
+  let topCount = 0;
+  for(let i in colors){
+    let colorsRow = colors[i];
+    for(let j in colorsRow){
+      let color = colorsRow[j];
+      colString = 'background-color: rgb('+ color.red+','+ color.green + ','+ color.blue + ");";
+      document.getElementById(topCount).setAttribute("style",colString);
+      // document.getElementById(topCount).innerHTML = color.index;
+      topCount++;
+    }
+  }
+}
 
 function buildColors(s){
   let size = s;
@@ -31,10 +48,6 @@ function buildColors(s){
   }
 }
 
-function sleep(ms){
-  return new Promise(resolve => setTimeout(resolve,ms));
-}
-
 function shuffle() {
   for(let i = colors.length-1; i > 0; i--){
     let colorsRow = colors[i];
@@ -44,6 +57,7 @@ function shuffle() {
       [colors[i][j] , colors[i_r][j_r]] = [colors[i_r][j_r] , colors[i][j]];
     }
   }
+  draw();
 }
 
 function buildTable(){
@@ -60,21 +74,9 @@ function buildTable(){
       indexCount++;
     }
   }
+  draw();
 }
 
-function draw(){
-  let topCount = 0;
-  for(let i in colors){
-    let colorsRow = colors[i];
-    for(let j in colorsRow){
-      let color = colorsRow[j];
-      colString = 'background-color: rgb('+ color.red+','+ color.green + ','+ color.blue + ");";
-      document.getElementById(topCount).setAttribute("style",colString);
-      // document.getElementById(topCount).innerHTML = color.index;
-      topCount++;
-    }
-  }
-}
 
 function sortColors(){
   let colLen = colors.length;
@@ -101,15 +103,19 @@ function sortColors(){
   }
 }
 
-async function main(s){
+function initiate(s){
   let size = s;
   buildColors(size);
   buildTable();
-  draw();
-  await sleep(500);
-  shuffle();
-  draw();
-  await sleep(200);
+  document.getElementById('initiate').setAttribute('hidden','true');
+  document.getElementById('shuffle').setAttribute('hidden','false');
+  document.getElementById('shuffle').setAttribute('style','display: inherit;');
+  console.log('shuffle hidden: ',document.getElementById('shuffle'));
+  document.getElementById('sort').setAttribute('hidden','false');
+  document.getElementById('sort').setAttribute('style','display: inherit;');
+}
+
+async function sortAll(){
   let done = false
   let i = 0;
   while (!done){
@@ -122,4 +128,6 @@ async function main(s){
   }
 }
 
-main(size);
+// initiate(size);
+// shuffle();
+// sortAll();
